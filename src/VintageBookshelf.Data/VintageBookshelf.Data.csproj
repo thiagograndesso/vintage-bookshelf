@@ -2,10 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <LangVersion>default</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Mappings" />
     <Folder Include="Repository" />
     <Folder Include="Mappings\" />
     <Folder Include="Repository\" />
@@ -13,5 +14,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VintageBookshelf.Domain\VintageBookshelf.Domain.csproj" />
   </ItemGroup>
 </Project>
