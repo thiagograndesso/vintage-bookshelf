@@ -2,7 +2,7 @@
 
 namespace VintageBookshelf.Domain.Models
 {
-    public class Library : Entity
+    public class Bookshelf : Entity
     {
         public string Name { get; set; }
         public string Address { get; set; }

@@ -6,6 +6,7 @@ namespace VintageBookshelf.Domain.Models
     {
         public string Name { get; set; }
         public string BirthDate { get; set; }
+        public string Biography { get; set; }
 
         public IEnumerable<Book> Books { get; set; }
     }

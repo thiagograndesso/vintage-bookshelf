@@ -6,7 +6,10 @@
         public string Publisher { get; set; }
         public int ReleaseYear { get; set; }
         public string Summary { get; set; }
+        public long AuthorId { get; set; }
+        public long BookshelfId { get; set; }
 
-        public Author Author { get; set; }
+        public virtual Author Author { get; set; }
+        public virtual Bookshelf Bookshelf { get; set; }
     }
 }
