@@ -1,5 +1,3 @@
-using System;
-
 namespace VintageBookshelf.UI.Models
 {
     public class ErrorViewModel

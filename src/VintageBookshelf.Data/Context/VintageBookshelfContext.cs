@@ -6,7 +6,6 @@ namespace VintageBookshelf.Data.Context
 {
     public class VintageBookshelfContext : DbContext
     {
-        public VintageBookshelfContext() { }
         public VintageBookshelfContext(DbContextOptions options) : base(options) { }
 
         public DbSet<Book> Books { get; set; }
@@ -24,5 +23,5 @@ namespace VintageBookshelf.Data.Context
             
             base.OnModelCreating(modelBuilder);
         }
-    }
+    } 
 }
