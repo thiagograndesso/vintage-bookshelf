@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using VintageBookshelf.Data.Context;
+using VintageBookshelf.Data.Repository;
+using VintageBookshelf.Domain.Interfaces;
 
 namespace VintageBookshelf.UI
 {
@@ -35,6 +37,9 @@ namespace VintageBookshelf.UI
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
+
+            services.AddScoped<VintageBookshelfContext>()
+                .AddScoped<IBookRepository, BookRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
