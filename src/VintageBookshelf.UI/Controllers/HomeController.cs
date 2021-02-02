@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using VintageBookshelf.UI.Models;
+using VintageBookshelf.UI.ViewModels;
 
 namespace VintageBookshelf.UI.Controllers
 {
