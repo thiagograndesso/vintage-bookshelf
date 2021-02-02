@@ -2,10 +2,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using VintageBookshelf.Domain.Interfaces;
 using VintageBookshelf.Domain.Models;
-using VintageBookshelf.UI.Data;
 using VintageBookshelf.UI.ViewModels;
 
 namespace VintageBookshelf.UI.Controllers
@@ -17,8 +15,7 @@ namespace VintageBookshelf.UI.Controllers
         private readonly IBookshelfRepository _bookshelfRepository;
         private readonly IMapper _mapper;
 
-        public BooksController(ApplicationDbContext context, 
-            IBookRepository bookRepository, 
+        public BooksController(IBookRepository bookRepository, 
             IAuthorRepository authorRepository, 
             IBookshelfRepository bookshelfRepository, 
             IMapper mapper)
@@ -48,9 +45,8 @@ namespace VintageBookshelf.UI.Controllers
         
         public async Task<IActionResult> Create()
         {
-            ViewData["AuthorId"] = new SelectList(await _authorRepository.GetAll(), "Id", "Biography");
-            ViewData["BookshelfId"] = new SelectList(await _bookshelfRepository.GetAll(), "Id", "Address");
-            return View();
+            var bookViewModel = await PopulateAuthorsAndBookshelves(new BookViewModel());
+            return View(bookViewModel);
         }
         
         [HttpPost]
@@ -61,11 +57,10 @@ namespace VintageBookshelf.UI.Controllers
             {
                 await _bookRepository.Add(_mapper.Map<Book>(bookViewModel));
                 await _bookRepository.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
 
-            ViewData["AuthorId"] = new SelectList(await _authorRepository.GetAll(), "Id", "Biography", bookViewModel.AuthorId);
-            ViewData["BookshelfId"] = new SelectList(await _bookshelfRepository.GetAll(), "Id", "Address", bookViewModel.BookshelfId);
+            await PopulateAuthorsAndBookshelves(bookViewModel);
             
             return View(bookViewModel);
         }
@@ -77,9 +72,8 @@ namespace VintageBookshelf.UI.Controllers
             {
                 return NotFound();
             }
-            
-            ViewData["AuthorId"] = new SelectList(await _authorRepository.GetAll(), "Id", "Biography", bookViewModel.AuthorId);
-            ViewData["BookshelfId"] = new SelectList(await _bookshelfRepository.GetAll(), "Id", "Address", bookViewModel.BookshelfId);
+
+            await PopulateAuthorsAndBookshelves(bookViewModel);
             
             return View(bookViewModel);
         }
@@ -97,11 +91,10 @@ namespace VintageBookshelf.UI.Controllers
             {
                 await _bookRepository.Update(_mapper.Map<Book>(bookViewModel));
                 await _bookRepository.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
             
-            ViewData["AuthorId"] = new SelectList(await _authorRepository.GetAll(), "Id", "Biography", bookViewModel.AuthorId);
-            ViewData["BookshelfId"] = new SelectList(await _bookshelfRepository.GetAll(), "Id", "Address", bookViewModel.BookshelfId);
+            await PopulateAuthorsAndBookshelves(bookViewModel);
             
             return View(bookViewModel);
         }
@@ -129,7 +122,14 @@ namespace VintageBookshelf.UI.Controllers
             
             await _bookRepository.Remove(id);
             await _bookRepository.SaveChanges();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
+        }
+
+        private async Task<BookViewModel> PopulateAuthorsAndBookshelves(BookViewModel viewModel)
+        {
+            viewModel.Authors = _mapper.Map<IEnumerable<AuthorViewModel>>(await _authorRepository.GetAll());
+            viewModel.Bookshelfs = _mapper.Map<IEnumerable<BookshelfViewModel>>(await _bookshelfRepository.GetAll());
+            return viewModel;
         }
     }
 }
