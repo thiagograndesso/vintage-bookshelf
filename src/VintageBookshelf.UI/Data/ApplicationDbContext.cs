@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using VintageBookshelf.UI.ViewModels;
 
 namespace VintageBookshelf.UI.Data
 {
@@ -9,5 +10,6 @@ namespace VintageBookshelf.UI.Data
             : base(options)
         {
         }
+        public DbSet<VintageBookshelf.UI.ViewModels.AuthorViewModel> AuthorViewModel { get; set; }
     }
 }

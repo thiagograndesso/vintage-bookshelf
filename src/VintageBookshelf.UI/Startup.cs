@@ -39,7 +39,9 @@ namespace VintageBookshelf.UI
             services.AddControllersWithViews();
 
             services.AddScoped<VintageBookshelfContext>()
-                .AddScoped<IBookRepository, BookRepository>();
+                .AddScoped<IBookRepository, BookRepository>()
+                .AddScoped<IAuthorRepository, AuthorRepository>()
+                .AddScoped<IBookshelfRepository, BookshelfRepository>();
 
             services.AddAutoMapper(typeof(Startup));
         }
