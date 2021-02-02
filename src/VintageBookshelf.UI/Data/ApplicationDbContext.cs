@@ -11,5 +11,6 @@ namespace VintageBookshelf.UI.Data
         {
         }
         public DbSet<VintageBookshelf.UI.ViewModels.AuthorViewModel> AuthorViewModel { get; set; }
+        public DbSet<VintageBookshelf.UI.ViewModels.BookshelfViewModel> BookshelfViewModel { get; set; }
     }
 }
