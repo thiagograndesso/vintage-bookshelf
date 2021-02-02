@@ -1,37 +1,32 @@
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using VintageBookshelf.UI.Data;
+using VintageBookshelf.Domain.Interfaces;
+using VintageBookshelf.Domain.Models;
 using VintageBookshelf.UI.ViewModels;
 
 namespace VintageBookshelf.UI.Controllers
 {
     public class AuthorsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IAuthorRepository _authorRepository;
+        private readonly IMapper _mapper;
 
-        public AuthorsController(ApplicationDbContext context)
+        public AuthorsController(IAuthorRepository authorRepository, IMapper mapper)
         {
-            _context = context;
+            _authorRepository = authorRepository;
+            _mapper = mapper;
         }
 
-        // GET: Authors
         public async Task<IActionResult> Index()
         {
-            return View(await _context.AuthorViewModel.ToListAsync());
+            return View(_mapper.Map<IEnumerable<AuthorViewModel>>(await _authorRepository.GetAll()));
         }
-
-        // GET: Authors/Details/5
-        public async Task<IActionResult> Details(long? id)
+        
+        public async Task<IActionResult> Details(long id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var authorViewModel = await _context.AuthorViewModel
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var authorViewModel = _mapper.Map<AuthorViewModel>(await _authorRepository.GetById(id));
             if (authorViewModel == null)
             {
                 return NotFound();
@@ -39,51 +34,38 @@ namespace VintageBookshelf.UI.Controllers
 
             return View(authorViewModel);
         }
-
-        // GET: Authors/Create
+        
         public IActionResult Create()
         {
             return View();
         }
-
-        // POST: Authors/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,BirthDate,Biography")] AuthorViewModel authorViewModel)
+        public async Task<IActionResult> Create(AuthorViewModel authorViewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(authorViewModel);
-                await _context.SaveChangesAsync();
+                await _authorRepository.Add(_mapper.Map<Author>(authorViewModel));
+                await _authorRepository.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             return View(authorViewModel);
         }
-
-        // GET: Authors/Edit/5
-        public async Task<IActionResult> Edit(long? id)
+        
+        public async Task<IActionResult> Edit(long id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var authorViewModel = await _context.AuthorViewModel.FindAsync(id);
+            var authorViewModel = _mapper.Map<AuthorViewModel>(await _authorRepository.GetById(id));
             if (authorViewModel == null)
             {
                 return NotFound();
             }
             return View(authorViewModel);
         }
-
-        // POST: Authors/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Name,BirthDate,Biography")] AuthorViewModel authorViewModel)
+        public async Task<IActionResult> Edit(long id, AuthorViewModel authorViewModel)
         {
             if (id != authorViewModel.Id)
             {
@@ -92,37 +74,16 @@ namespace VintageBookshelf.UI.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(authorViewModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AuthorViewModelExists(authorViewModel.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _authorRepository.Update(_mapper.Map<Author>(authorViewModel));
+                await _authorRepository.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             return View(authorViewModel);
         }
-
-        // GET: Authors/Delete/5
-        public async Task<IActionResult> Delete(long? id)
+        
+        public async Task<IActionResult> Delete(long id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var authorViewModel = await _context.AuthorViewModel
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var authorViewModel = _mapper.Map<AuthorViewModel>(await _authorRepository.GetById(id));
             if (authorViewModel == null)
             {
                 return NotFound();
@@ -130,21 +91,20 @@ namespace VintageBookshelf.UI.Controllers
 
             return View(authorViewModel);
         }
-
-        // POST: Authors/Delete/5
+        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var authorViewModel = await _context.AuthorViewModel.FindAsync(id);
-            _context.AuthorViewModel.Remove(authorViewModel);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            var authorViewModel = _mapper.Map<AuthorViewModel>(await _authorRepository.GetById(id));
+            if (authorViewModel == null)
+            {
+                return NotFound();
+            }
 
-        private bool AuthorViewModelExists(long id)
-        {
-            return _context.AuthorViewModel.Any(e => e.Id == id);
+            await _authorRepository.Remove(id);
+            await _authorRepository.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

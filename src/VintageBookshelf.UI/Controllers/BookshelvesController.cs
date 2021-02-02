@@ -1,14 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using VintageBookshelf.Data.Repository;
 using VintageBookshelf.Domain.Models;
-using VintageBookshelf.UI.Data;
 using VintageBookshelf.UI.ViewModels;
 
 namespace VintageBookshelf.UI.Controllers
