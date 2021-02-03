@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -48,8 +49,11 @@ namespace VintageBookshelf.UI.Controllers
             {
                 await _authorRepository.Add(_mapper.Map<Author>(authorViewModel));
                 await _authorRepository.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
+
+            var errors = ModelState.Values.SelectMany(m => m.Errors);
+            
             return View(authorViewModel);
         }
         
@@ -76,7 +80,7 @@ namespace VintageBookshelf.UI.Controllers
             {
                 await _authorRepository.Update(_mapper.Map<Author>(authorViewModel));
                 await _authorRepository.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
             return View(authorViewModel);
         }
@@ -104,7 +108,7 @@ namespace VintageBookshelf.UI.Controllers
 
             await _authorRepository.Remove(id);
             await _authorRepository.SaveChanges();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
         }
     }
 }
