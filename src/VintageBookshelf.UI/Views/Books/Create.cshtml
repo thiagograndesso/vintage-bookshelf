@@ -1,15 +1,13 @@
 @model VintageBookshelf.UI.ViewModels.BookViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Add New Book";
 }
 
-<h1>Create</h1>
-
-<h4>BookViewModel</h4>
+<h4>@ViewData["Title"]</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-10">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -33,24 +31,46 @@
                 <span asp-validation-for="Summary" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="UploadImage" class="control-label"></label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="UploadImage" asp-for="UploadImage">
+                    <label data-browse="Browse" style="width: 400px" class="custom-file-label" for="UploadImage"></label>
+                    <label style="display: none" id="img-name"></label>
+                </div>
+                <span asp-validation-for="UploadImage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="AuthorId" class="control-label"></label>
-                <select asp-for="AuthorId" class ="form-control" asp-items="ViewBag.AuthorId"></select>
+                <select asp-for="AuthorId" class="form-control" asp-items="@(new SelectList(Model.Authors, "Id", "Name"))">
+                    <option></option>
+                </select>
+                <span asp-validation-for="AuthorId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="BookshelfId" class="control-label"></label>
-                <select asp-for="BookshelfId" class ="form-control" asp-items="ViewBag.BookshelfId"></select>
+                <select asp-for="BookshelfId" class="form-control" asp-items="@(new SelectList(Model.Bookshelves, "Id", "Name"))">
+                    <option></option>
+                </select>
+                <span asp-validation-for="BookshelfId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
+                <a class="btn btn-info" asp-action="Index">Back</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $('#UploadImage').change(function (){
+           $('#img-name').text(this.files[0].name);
+           $('#img-name')[0].style.display = 'block';
+        });
+        
+        $('#UploadImage').attr("data-val", "true");
+        $('#UploadImage').attr("data-val-required", "Choose required image field");
+    </script>
 }

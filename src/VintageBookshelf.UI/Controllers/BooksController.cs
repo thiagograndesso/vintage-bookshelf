@@ -128,7 +128,7 @@ namespace VintageBookshelf.UI.Controllers
         private async Task<BookViewModel> PopulateAuthorsAndBookshelves(BookViewModel viewModel)
         {
             viewModel.Authors = _mapper.Map<IEnumerable<AuthorViewModel>>(await _authorRepository.GetAll());
-            viewModel.Bookshelfs = _mapper.Map<IEnumerable<BookshelfViewModel>>(await _bookshelfRepository.GetAll());
+            viewModel.Bookshelves = _mapper.Map<IEnumerable<BookshelfViewModel>>(await _bookshelfRepository.GetAll());
             return viewModel;
         }
     }

@@ -28,10 +28,14 @@ namespace VintageBookshelf.UI.ViewModels
         public string Summary { get; set; }
 
         public IFormFile UploadImage { get; set; }
+
+        public string Image { get; set; }
         
+        [Display(Name = "Author")]
         [HiddenInput]
         public long AuthorId { get; set; }
         
+        [Display(Name = "Bookshelf")]
         [HiddenInput]
         public long BookshelfId { get; set; }
 
@@ -39,6 +43,6 @@ namespace VintageBookshelf.UI.ViewModels
         public virtual BookshelfViewModel Bookshelf { get; set; }
 
         public IEnumerable<AuthorViewModel> Authors { get; set; }
-        public IEnumerable<BookshelfViewModel> Bookshelfs { get; set; }
+        public IEnumerable<BookshelfViewModel> Bookshelves { get; set; }
     }
 }
