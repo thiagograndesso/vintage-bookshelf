@@ -1,10 +1,13 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using VintageBookshelf.Domain.Interfaces;
 using VintageBookshelf.Domain.Models;
 using VintageBookshelf.UI.ViewModels;
+using static System.IO.File;
 
 namespace VintageBookshelf.UI.Controllers
 {
@@ -53,18 +56,47 @@ namespace VintageBookshelf.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BookViewModel bookViewModel)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                await _bookRepository.Add(_mapper.Map<Book>(bookViewModel));
-                await _bookRepository.SaveChanges();
-                return RedirectToAction("Index");
+                await PopulateAuthorsAndBookshelves(bookViewModel);
+                return View(bookViewModel);
             }
 
-            await PopulateAuthorsAndBookshelves(bookViewModel);
-            
-            return View(bookViewModel);
+            if (!await UploadImage(bookViewModel))
+            {
+                await PopulateAuthorsAndBookshelves(bookViewModel);
+                return View(bookViewModel);
+            }
+
+            await _bookRepository.Add(_mapper.Map<Book>(bookViewModel));
+            await _bookRepository.SaveChanges();
+            return RedirectToAction("Index");
         }
-        
+
+        private async Task<bool> UploadImage(BookViewModel bookViewModel)
+        {
+            if (bookViewModel.UploadImage.Length <= 0)
+            {
+                return false;
+            }
+            
+            var imageName = $"{Guid.NewGuid()}_{bookViewModel.UploadImage.FileName}";
+            var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", imageName);
+
+            if (Exists(imagePath))
+            {
+                ModelState.AddModelError(string.Empty,"File already exists!");
+                return false;
+            }
+
+            await using var stream = new FileStream(imagePath, FileMode.Create);
+            await bookViewModel.UploadImage.CopyToAsync(stream);
+
+            bookViewModel.Image = imageName;
+            
+            return true;
+        }
+
         public async Task<IActionResult> Edit(long id)
         {
             var bookViewModel = _mapper.Map<BookViewModel>(await _bookRepository.GetBookWithAuthorAndBookshelf(id));

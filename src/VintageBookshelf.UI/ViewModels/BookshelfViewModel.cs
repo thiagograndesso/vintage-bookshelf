@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using VintageBookshelf.Domain.Models;
 
 namespace VintageBookshelf.UI.ViewModels
 {
@@ -21,6 +19,6 @@ namespace VintageBookshelf.UI.ViewModels
         [StringLength(200, ErrorMessage = "Field {0} needs to be {2} and {1} characters long", MinimumLength = 0)]
         public string City { get; set; }
 
-        public IEnumerable<Book> Books { get; set; }
+        // public IEnumerable<Book> Books { get; set; }
     }
 }

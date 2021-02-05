@@ -1,12 +1,10 @@
 @model VintageBookshelf.UI.ViewModels.BookshelfViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Add New Bookshelf";
 }
 
-<h1>Create</h1>
-
-<h4>BookshelfViewModel</h4>
+<h4>@ViewData["Title"]</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -29,13 +27,10 @@
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
+                <a class="btn btn-info" asp-action="Index">Back</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

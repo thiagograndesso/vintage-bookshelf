@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using VintageBookshelf.Data.Repository;
+using VintageBookshelf.Domain.Interfaces;
 using VintageBookshelf.Domain.Models;
 using VintageBookshelf.UI.ViewModels;
 
@@ -10,10 +10,10 @@ namespace VintageBookshelf.UI.Controllers
 {
     public class BookshelvesController : BaseController
     {
-        private readonly BookshelfRepository _bookshelfRepository;
+        private readonly IBookshelfRepository _bookshelfRepository;
         private readonly IMapper _mapper;
 
-        public BookshelvesController(BookshelfRepository bookshelfRepository, IMapper mapper)
+        public BookshelvesController(IBookshelfRepository bookshelfRepository, IMapper mapper)
         {
             _bookshelfRepository = bookshelfRepository;
             _mapper = mapper;
