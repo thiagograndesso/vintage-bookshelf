@@ -1,18 +1,30 @@
 @model VintageBookshelf.UI.ViewModels.BookViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = $"Edit {Model.Title}";
 }
 
-<h1>Edit</h1>
-
-<h4>BookViewModel</h4>
+<h4 style="padding-top: 30px">@ViewData["Title"]</h4>
 <hr />
+
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <div class="col-md-10">
+        <form enctype="multipart/form-data" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            
+            <div class="form-group">
+                <label asp-for="AuthorId" class="control-label"></label><br/>
+                <label><b>@Model.Author.Name</b></label>
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="BookshelfId" class="control-label"></label><br/>
+                <label><b>@Model.Bookshelf.Name</b></label>
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
@@ -30,30 +42,40 @@
             </div>
             <div class="form-group">
                 <label asp-for="Summary" class="control-label"></label>
-                <input asp-for="Summary" class="form-control" />
+                <textarea cols="40" rows="5" asp-for="Summary" class="form-control" ></textarea>
                 <span asp-validation-for="Summary" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AuthorId" class="control-label"></label>
-                <select asp-for="AuthorId" class="form-control" asp-items="ViewBag.AuthorId"></select>
-                <span asp-validation-for="AuthorId" class="text-danger"></span>
+                <label>Current Image</label><br/>
+                <img src="~/images/@Model.Image" alt="@Model.Image" style="width: 70px; height: 100px;">
             </div>
+            
             <div class="form-group">
-                <label asp-for="BookshelfId" class="control-label"></label>
-                <select asp-for="BookshelfId" class="form-control" asp-items="ViewBag.BookshelfId"></select>
-                <span asp-validation-for="BookshelfId" class="text-danger"></span>
+                <label asp-for="UploadImage" class="control-label"></label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="UploadImage" asp-for="UploadImage">
+                    <label data-browse="Browse" style="width: 400px" class="custom-file-label" for="UploadImage"></label>
+                    <label style="display: none" id="img-name"></label>
+                </div>
+                <span asp-validation-for="UploadImage" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
+                <a class="btn btn-info" href="javascript:window.history.back();">Back</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $('#UploadImage').change(function (){
+           $('#img-name').text(this.files[0].name);
+           $('#img-name')[0].style.display = 'block';
+        });
+    
+    </script>
 }

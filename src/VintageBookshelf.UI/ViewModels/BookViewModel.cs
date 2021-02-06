@@ -28,7 +28,7 @@ namespace VintageBookshelf.UI.ViewModels
         public string Summary { get; set; }
 
         [Display(Name = "Image")]
-        public IFormFile UploadImage { get; set; }
+        public IFormFile? UploadImage { get; set; }
 
         public string? Image { get; set; }
         

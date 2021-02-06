@@ -121,14 +121,30 @@ namespace VintageBookshelf.UI.Controllers
                 return NotFound();
             }
 
+            var bookViewModelUpdate = _mapper.Map<BookViewModel>(await _bookRepository.GetBookWithAuthorAndBookshelf(id));
+            bookViewModel.Author = bookViewModelUpdate.Author;
+            bookViewModel.Bookshelf = bookViewModel.Bookshelf;
+            
             if (ModelState.IsValid)
             {
-                await _bookRepository.Update(_mapper.Map<Book>(bookViewModel));
-                await _bookRepository.SaveChanges();
+                if (bookViewModel.UploadImage is not null)
+                {
+                    if (!await UploadImage(bookViewModel))
+                    {
+                        return View(bookViewModel);
+                    }
+
+                    bookViewModelUpdate.Image = bookViewModel.Image;
+                }
+
+                bookViewModelUpdate.Title = bookViewModel.Title;
+                bookViewModelUpdate.Summary = bookViewModel.Summary;
+                bookViewModelUpdate.ReleaseYear = bookViewModel.ReleaseYear;
+                bookViewModelUpdate.Publisher = bookViewModel.Publisher;
+                
+                await _bookRepository.Update(_mapper.Map<Book>(bookViewModelUpdate));
                 return RedirectToAction("Index");
             }
-            
-            await PopulateAuthorsAndBookshelves(bookViewModel);
             
             return View(bookViewModel);
         }
@@ -155,7 +171,6 @@ namespace VintageBookshelf.UI.Controllers
             }
             
             await _bookRepository.Remove(id);
-            await _bookRepository.SaveChanges();
             return RedirectToAction("Index");
         }
 
