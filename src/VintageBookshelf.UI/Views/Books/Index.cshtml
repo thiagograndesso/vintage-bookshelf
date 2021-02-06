@@ -49,6 +49,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ReleaseYear)
             </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Author!.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bookshelf!.Name)
+            </td>
             <td class="text-right">
                 <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id"><spam class="fa fa-search"></spam></a>
                 <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id"><spam class="fa fa-pencil-alt"></spam></a>

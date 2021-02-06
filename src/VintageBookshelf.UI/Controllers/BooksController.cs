@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -58,6 +59,7 @@ namespace VintageBookshelf.UI.Controllers
         {
             if (!ModelState.IsValid)
             {
+                var errors = ModelState.Values.SelectMany(m => m.Errors).ToList();
                 await PopulateAuthorsAndBookshelves(bookViewModel);
                 return View(bookViewModel);
             }

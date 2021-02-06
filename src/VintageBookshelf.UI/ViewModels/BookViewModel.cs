@@ -27,9 +27,10 @@ namespace VintageBookshelf.UI.ViewModels
         [StringLength(1000, ErrorMessage = "Field {0} needs to be {2} and {1} characters long", MinimumLength = 0)]
         public string Summary { get; set; }
 
+        [Display(Name = "Image")]
         public IFormFile UploadImage { get; set; }
 
-        public string Image { get; set; }
+        public string? Image { get; set; }
         
         [Display(Name = "Author")]
         [HiddenInput]
@@ -39,10 +40,10 @@ namespace VintageBookshelf.UI.ViewModels
         [HiddenInput]
         public long BookshelfId { get; set; }
 
-        public virtual AuthorViewModel Author { get; set; }
-        public virtual BookshelfViewModel Bookshelf { get; set; }
+        public AuthorViewModel? Author { get; set; }
+        public BookshelfViewModel? Bookshelf { get; set; }
 
-        public IEnumerable<AuthorViewModel> Authors { get; set; }
-        public IEnumerable<BookshelfViewModel> Bookshelves { get; set; }
+        public IEnumerable<AuthorViewModel>? Authors { get; set; }
+        public IEnumerable<BookshelfViewModel>? Bookshelves { get; set; }
     }
 }
