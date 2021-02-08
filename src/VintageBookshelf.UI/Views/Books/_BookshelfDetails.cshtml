@@ -1,0 +1,38 @@
+@model VintageBookshelf.UI.ViewModels.BookViewModel
+<div style="padding-top: 20px;">
+    <div>
+        <hr/>
+        <h5>Bookshelf</h5>
+    </div>
+    
+    @if (Model != null)
+    {
+        <table class="table table-hover">
+            <thead class="thead-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bookshelf.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bookshelf.Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bookshelf.City)
+                </th>
+                <th></th>
+            </tr>
+            </thead>
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => model.Bookshelf.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Bookshelf.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Bookshelf.City)
+                </td>
+            </tr>
+        </table>
+    }
+</div>

@@ -7,39 +7,29 @@
 <h4 style="padding-top: 30px">@ViewData["Title"]</h4>
 <hr />
 
-<div class="row">
-    <div class="col-md-10">
-        <form enctype="multipart/form-data" asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            
-            <div class="form-group">
-                <label asp-for="AuthorId" class="control-label"></label><br/>
-                <label><b>@Model.Author.Name</b></label>
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="BookshelfId" class="control-label"></label><br/>
-                <label><b>@Model.Bookshelf.Name</b></label>
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            
+<form enctype="multipart/form-data" asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+    
+    <div class="form-row">
+        <div class="form-group col-md-6">
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
+                <input asp-for="Title" class="form-control"/>
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Publisher" class="control-label"></label>
-                <input asp-for="Publisher" class="form-control" />
-                <span asp-validation-for="Publisher" class="text-danger"></span>
+                <input asp-for="Publisher" class="form-control"/>
+                <span asp-validation-for="Publisher" class="text-danger"></span>                
             </div>
             <div class="form-group">
                 <label asp-for="ReleaseYear" class="control-label"></label>
-                <input asp-for="ReleaseYear" class="form-control" />
+                <input asp-for="ReleaseYear" class="form-control"/>
                 <span asp-validation-for="ReleaseYear" class="text-danger"></span>
             </div>
+        </div>
+        <div class="form-group col-md-6">
             <div class="form-group">
                 <label asp-for="Summary" class="control-label"></label>
                 <textarea cols="40" rows="5" asp-for="Summary" class="form-control" ></textarea>
@@ -47,9 +37,8 @@
             </div>
             <div class="form-group">
                 <label>Current Image</label><br/>
-                <img src="~/images/@Model.Image" alt="@Model.Image" style="width: 70px; height: 100px;">
+                <img src="~/images/@Model.Image" alt="@Model.Image" style="width: 70px; height: 100px;">    
             </div>
-            
             <div class="form-group">
                 <label asp-for="UploadImage" class="control-label"></label>
                 <div class="custom-file">
@@ -59,13 +48,18 @@
                 </div>
                 <span asp-validation-for="UploadImage" class="text-danger"></span>
             </div>
-
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-                <a class="btn btn-info" href="javascript:window.history.back();">Back</a>
-            </div>
-        </form>
+        </div>
     </div>
+
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+        <a class="btn btn-info" href="javascript:window.history.back();">Back</a>
+    </div>
+</form>
+
+<div>
+    <partial name="_AuthorDetails" />
+    <partial name="_BookshelfDetails" />
 </div>
 
 @section Scripts {
@@ -75,7 +69,6 @@
         $('#UploadImage').change(function (){
            $('#img-name').text(this.files[0].name);
            $('#img-name')[0].style.display = 'block';
-        });
-    
+        });    
     </script>
 }
