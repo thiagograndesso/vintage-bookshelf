@@ -1,54 +1,57 @@
 @model VintageBookshelf.UI.ViewModels.BookViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = $"Book Details - {Model.Title}";
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>BookViewModel</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Publisher)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Publisher)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ReleaseYear)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ReleaseYear)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Summary)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Summary)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Author)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Author.Biography)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Bookshelf)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Bookshelf.Address)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<h4 style="padding-top: 50px;">@ViewData["Title"]</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <img src="~/images/@Model.Image" alt="@Model.Image" style="width: 300px; height: 428px;">
+    </div>
+    <div class="col-md-6">
+        <dl>
+            <dt>
+                @Html.DisplayNameFor(model => model.Title)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Title)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Publisher)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Publisher)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.ReleaseYear)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ReleaseYear)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Summary)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Summary)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Author)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Author.Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Bookshelf)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Bookshelf.Name)
+            </dd>
+        </dl>
+        <div>
+            <a class="btn btn-dark" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+            <a class="btn btn-info" href="javascript:window.history.back();" >Back</a>
+        </div>
+    </div>
 </div>
