@@ -174,6 +174,47 @@ namespace VintageBookshelf.UI.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> UpdateAuthor(long id)
+        {
+            var bookViewModel = _mapper.Map<BookViewModel>(await _bookRepository.GetBookWithAuthorAndBookshelf(id));
+            if (bookViewModel == null)
+            {
+                return NotFound();
+            }
+
+            return PartialView("_UpdateAuthor", new BookViewModel { Author = bookViewModel.Author });
+        }
+
+        public async Task<IActionResult> GetAuthor(long id)
+        {
+            var bookViewModel = _mapper.Map<BookViewModel>(await _bookRepository.GetBookWithAuthor(id));
+            if (bookViewModel == null)
+            {
+                return NotFound();
+            }
+
+            return PartialView("_AuthorDetails", bookViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateAuthor(BookViewModel bookViewModel)
+        {
+            ModelState.Remove("Title");
+            ModelState.Remove("Publisher");
+            ModelState.Remove("Summary");
+            
+            if (!ModelState.IsValid)
+            {
+                return PartialView("_UpdateAuthor", bookViewModel);
+            }
+
+            await _authorRepository.Update(_mapper.Map<Author>(bookViewModel.Author));
+
+            var url = Url.Action("GetAuthor", "Books", new {id = bookViewModel.Id});
+            return Json(new { success = true, url });
+        }
+
         private async Task<BookViewModel> PopulateAuthorsAndBookshelves(BookViewModel viewModel)
         {
             viewModel.Authors = _mapper.Map<IEnumerable<AuthorViewModel>>(await _authorRepository.GetAll());

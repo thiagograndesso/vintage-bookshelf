@@ -33,6 +33,9 @@
                 <td>
                     @Html.DisplayFor(model => model.Author.Biography)
                 </td>
+                <td>
+                    <a asp-action="UpdateAuthor" asp-route-id="@Model.Id" class="btn btn-info" data-modal="" ><span title="Edit" class="fa fa-pen-alt"></span></a>
+                </td>
             </tr>
             </tbody>
         </table>

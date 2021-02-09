@@ -12,7 +12,7 @@
     <input type="hidden" asp-for="Id" />
     
     <div class="form-row">
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-5">
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control"/>
@@ -29,7 +29,7 @@
                 <span asp-validation-for="ReleaseYear" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-5">
             <div class="form-group">
                 <label asp-for="Summary" class="control-label"></label>
                 <textarea cols="40" rows="5" asp-for="Summary" class="form-control" ></textarea>
@@ -57,18 +57,32 @@
     </div>
 </form>
 
-<div>
+<div id="AuthorTarget">
     <partial name="_AuthorDetails" />
+</div>
+<div>
     <partial name="_BookshelfDetails" />
+</div>
+
+<div id="myModal" class="modal fade in">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="myModalContent">
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    
+
     <script>
         $('#UploadImage').change(function (){
            $('#img-name').text(this.files[0].name);
            $('#img-name')[0].style.display = 'block';
-        });    
+        });           
+        $(document).ready(function () {
+            AjaxModal();    
+        });
     </script>
 }
