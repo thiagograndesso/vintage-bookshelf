@@ -19,11 +19,13 @@ namespace VintageBookshelf.UI.Controllers
             _mapper = mapper;
         }
         
+        [Route("list-bookshelves")]
         public async Task<IActionResult> Index()
         {
             return View(_mapper.Map<IEnumerable<BookshelfViewModel>>(await _bookshelfRepository.GetAll()));
         }
         
+        [Route("bookshelf-details/{id:long}")]
         public async Task<IActionResult> Details(long id)
         {
             var bookshelfViewModel = _mapper.Map<BookshelfViewModel>(await _bookshelfRepository.GetById(id));
@@ -35,11 +37,13 @@ namespace VintageBookshelf.UI.Controllers
             return View(bookshelfViewModel);
         }
         
+        [Route("new-bookshelf")]
         public IActionResult Create()
         {
             return View();
         }
         
+        [Route("new-bookshelf")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BookshelfViewModel bookshelfViewModel)
@@ -55,6 +59,7 @@ namespace VintageBookshelf.UI.Controllers
             return View(bookshelfViewModel);
         }
 
+        [Route("edit-bookshelf/{id:long}")]
         public async Task<IActionResult> Edit(long id)
         {
             var bookshelfViewModel = _mapper.Map<BookshelfViewModel>(await _bookshelfRepository.GetById(id));
@@ -65,6 +70,7 @@ namespace VintageBookshelf.UI.Controllers
             return View(bookshelfViewModel);
         }
         
+        [Route("edit-bookshelf/{id:long}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, BookshelfViewModel bookshelfViewModel)
@@ -80,6 +86,7 @@ namespace VintageBookshelf.UI.Controllers
             return View(bookshelfViewModel);
         }
         
+        [Route("delete-bookshelf/{id:long}")]
         public async Task<IActionResult> Delete(long id)
         {
             var bookshelfViewModel = _mapper.Map<BookshelfViewModel>(await _bookshelfRepository.GetById(id));
@@ -91,6 +98,7 @@ namespace VintageBookshelf.UI.Controllers
             return View(bookshelfViewModel);
         }
         
+        [Route("delete-bookshelf/{id:long}")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)

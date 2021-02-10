@@ -20,11 +20,13 @@ namespace VintageBookshelf.UI.Controllers
             _mapper = mapper;
         }
 
+        [Route("list-authors")]
         public async Task<IActionResult> Index()
         {
             return View(_mapper.Map<IEnumerable<AuthorViewModel>>(await _authorRepository.GetAll()));
         }
         
+        [Route("author-details/{id:long}")]
         public async Task<IActionResult> Details(long id)
         {
             var authorViewModel = _mapper.Map<AuthorViewModel>(await _authorRepository.GetById(id));
@@ -36,11 +38,13 @@ namespace VintageBookshelf.UI.Controllers
             return View(authorViewModel);
         }
         
+        [Route("new-author")]
         public IActionResult Create()
         {
             return View();
         }
         
+        [Route("new-author")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(AuthorViewModel authorViewModel)
@@ -57,6 +61,7 @@ namespace VintageBookshelf.UI.Controllers
             return View(authorViewModel);
         }
         
+        [Route("edit-author/{id:long}")]
         public async Task<IActionResult> Edit(long id)
         {
             var authorViewModel = _mapper.Map<AuthorViewModel>(await _authorRepository.GetById(id));
@@ -67,6 +72,7 @@ namespace VintageBookshelf.UI.Controllers
             return View(authorViewModel);
         }
         
+        [Route("edit-author/{id:long}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, AuthorViewModel authorViewModel)
@@ -85,6 +91,7 @@ namespace VintageBookshelf.UI.Controllers
             return View(authorViewModel);
         }
         
+        [Route("delete-author/{id:long}")]
         public async Task<IActionResult> Delete(long id)
         {
             var authorViewModel = _mapper.Map<AuthorViewModel>(await _authorRepository.GetById(id));
@@ -96,6 +103,7 @@ namespace VintageBookshelf.UI.Controllers
             return View(authorViewModel);
         }
         
+        [Route("delete-author/{id:long}")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)

@@ -30,12 +30,14 @@ namespace VintageBookshelf.UI.Controllers
             _mapper = mapper;
         }
         
+        [Route("list-books")]
         public async Task<IActionResult> Index()
         {
             var books = await _bookRepository.GetAllWithAuthorAndBookshelf();
             return View(_mapper.Map<IEnumerable<BookViewModel>>(books));
         }
         
+        [Route("book-details/{id:long}")]
         public async Task<IActionResult> Details(long id)
         {
             var bookViewModel = _mapper.Map<BookViewModel>(await _bookRepository.GetBookWithAuthorAndBookshelf(id));
@@ -47,12 +49,14 @@ namespace VintageBookshelf.UI.Controllers
             return View(bookViewModel);
         }
         
+        [Route("new-book")]
         public async Task<IActionResult> Create()
         {
             var bookViewModel = await PopulateAuthorsAndBookshelves(new BookViewModel());
             return View(bookViewModel);
         }
         
+        [Route("new-book")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BookViewModel bookViewModel)
@@ -99,6 +103,7 @@ namespace VintageBookshelf.UI.Controllers
             return true;
         }
 
+        [Route("edit-book/{id:long}")]
         public async Task<IActionResult> Edit(long id)
         {
             var bookViewModel = _mapper.Map<BookViewModel>(await _bookRepository.GetBookWithAuthorAndBookshelf(id));
@@ -112,6 +117,7 @@ namespace VintageBookshelf.UI.Controllers
             return View(bookViewModel);
         }
         
+        [Route("edit-book")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, BookViewModel bookViewModel)
@@ -149,6 +155,7 @@ namespace VintageBookshelf.UI.Controllers
             return View(bookViewModel);
         }
         
+        [Route("delete-book/{id:long}")]
         public async Task<IActionResult> Delete(long id)
         {
             var bookViewModel = _mapper.Map<BookViewModel>(await _bookRepository.GetBookWithAuthorAndBookshelf(id));
@@ -160,6 +167,7 @@ namespace VintageBookshelf.UI.Controllers
             return View(bookViewModel);
         }
         
+        [Route("delete-book")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
@@ -174,6 +182,7 @@ namespace VintageBookshelf.UI.Controllers
             return RedirectToAction("Index");
         }
 
+        [Route("update-book-author/{id:long}")]
         public async Task<IActionResult> UpdateAuthor(long id)
         {
             var bookViewModel = _mapper.Map<BookViewModel>(await _bookRepository.GetBookWithAuthorAndBookshelf(id));
@@ -185,7 +194,8 @@ namespace VintageBookshelf.UI.Controllers
             return PartialView("_UpdateAuthor", new BookViewModel { Author = bookViewModel.Author });
         }
 
-        public async Task<IActionResult> GetAuthor(long id)
+        [Route("fetch-book-author/{id:long}")]
+        public async Task<IActionResult> FetchAuthor(long id)
         {
             var bookViewModel = _mapper.Map<BookViewModel>(await _bookRepository.GetBookWithAuthor(id));
             if (bookViewModel == null)
@@ -196,6 +206,7 @@ namespace VintageBookshelf.UI.Controllers
             return PartialView("_AuthorDetails", bookViewModel);
         }
 
+        [Route("update-book-author/{id:long}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateAuthor(BookViewModel bookViewModel)
@@ -211,7 +222,7 @@ namespace VintageBookshelf.UI.Controllers
 
             await _authorRepository.Update(_mapper.Map<Author>(bookViewModel.Author));
 
-            var url = Url.Action("GetAuthor", "Books", new {id = bookViewModel.Id});
+            var url = Url.Action("FetchAuthor", "Books", new {id = bookViewModel.Id});
             return Json(new { success = true, url });
         }
 
