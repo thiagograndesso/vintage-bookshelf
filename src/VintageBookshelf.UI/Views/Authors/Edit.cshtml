@@ -1,12 +1,9 @@
 @model VintageBookshelf.UI.ViewModels.AuthorViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = $"Edit {@Model.Name}";
 }
-
-<h1>Edit</h1>
-
-<h4>AuthorViewModel</h4>
+<h4 style="padding-top: 30px">@ViewData["Title"]</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -30,13 +27,10 @@
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
+                <a class="btn btn-info" href="javascript:window.history.back();">Back</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
