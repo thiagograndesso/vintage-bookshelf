@@ -4,6 +4,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using VintageBookshelf.Domain.Interfaces;
 using VintageBookshelf.Domain.Models;
+using VintageBookshelf.Domain.Notifications;
+using VintageBookshelf.Domain.Services;
 using VintageBookshelf.UI.ViewModels;
 
 namespace VintageBookshelf.UI.Controllers
@@ -11,11 +13,17 @@ namespace VintageBookshelf.UI.Controllers
     public class BookshelvesController : BaseController
     {
         private readonly IBookshelfRepository _bookshelfRepository;
+        private readonly IBookshelfService _bookshelfService;
         private readonly IMapper _mapper;
 
-        public BookshelvesController(IBookshelfRepository bookshelfRepository, IMapper mapper)
+        public BookshelvesController(IBookshelfRepository bookshelfRepository, 
+                                     IBookshelfService bookshelfService, 
+                                     IMapper mapper, 
+                                     INotifier notifier) : base(notifier)
         {
+            
             _bookshelfRepository = bookshelfRepository;
+            _bookshelfService = bookshelfService;
             _mapper = mapper;
         }
         
@@ -50,9 +58,7 @@ namespace VintageBookshelf.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _bookshelfRepository.Add(_mapper.Map<Bookshelf>(bookshelfViewModel));
-                await _bookshelfRepository.SaveChanges();
-                
+                await _bookshelfService.Add(_mapper.Map<Bookshelf>(bookshelfViewModel));
                 return RedirectToAction(nameof(Index));
             }
             
@@ -77,9 +83,7 @@ namespace VintageBookshelf.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _bookshelfRepository.Update(_mapper.Map<Bookshelf>(bookshelfViewModel));
-                await _bookshelfRepository.SaveChanges();
-                
+                await _bookshelfService.Update(_mapper.Map<Bookshelf>(bookshelfViewModel));
                 return RedirectToAction(nameof(Index));
             }
             
@@ -108,9 +112,8 @@ namespace VintageBookshelf.UI.Controllers
             {
                 return NotFound();
             }
-            await _bookshelfRepository.Remove(id);
-            await _bookshelfRepository.SaveChanges();
-            return RedirectToAction(nameof(Index));
+            await _bookshelfService.Remove(id);
+            return RedirectToAction("Index");
         }
     }
 }

@@ -7,6 +7,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using VintageBookshelf.Domain.Interfaces;
 using VintageBookshelf.Domain.Models;
+using VintageBookshelf.Domain.Notifications;
+using VintageBookshelf.Domain.Services;
 using VintageBookshelf.UI.ViewModels;
 using static System.IO.File;
 
@@ -17,16 +19,23 @@ namespace VintageBookshelf.UI.Controllers
         private readonly IBookRepository _bookRepository;
         private readonly IAuthorRepository _authorRepository;
         private readonly IBookshelfRepository _bookshelfRepository;
+        private readonly IBookService _bookService;
+        private readonly IAuthorService _authorService;
         private readonly IMapper _mapper;
 
         public BooksController(IBookRepository bookRepository, 
-            IAuthorRepository authorRepository, 
-            IBookshelfRepository bookshelfRepository, 
-            IMapper mapper)
+                               IAuthorRepository authorRepository, 
+                               IBookshelfRepository bookshelfRepository, 
+                               IBookService bookService,
+                               IAuthorService authorService,
+                               IMapper mapper,
+                               INotifier notifier) : base(notifier)
         {
             _bookRepository = bookRepository;
             _authorRepository = authorRepository;
             _bookshelfRepository = bookshelfRepository;
+            _bookService = bookService;
+            _authorService = authorService;
             _mapper = mapper;
         }
         
@@ -63,7 +72,6 @@ namespace VintageBookshelf.UI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var errors = ModelState.Values.SelectMany(m => m.Errors).ToList();
                 await PopulateAuthorsAndBookshelves(bookViewModel);
                 return View(bookViewModel);
             }
@@ -74,8 +82,13 @@ namespace VintageBookshelf.UI.Controllers
                 return View(bookViewModel);
             }
 
-            await _bookRepository.Add(_mapper.Map<Book>(bookViewModel));
-            await _bookRepository.SaveChanges();
+            await _bookService.Add(_mapper.Map<Book>(bookViewModel));
+
+            if (!IsOperationValid())
+            {
+                return View(bookViewModel);
+            }
+            
             return RedirectToAction("Index");
         }
 
@@ -148,7 +161,13 @@ namespace VintageBookshelf.UI.Controllers
                 bookViewModelUpdate.ReleaseYear = bookViewModel.ReleaseYear;
                 bookViewModelUpdate.Publisher = bookViewModel.Publisher;
                 
-                await _bookRepository.Update(_mapper.Map<Book>(bookViewModelUpdate));
+                await _bookService.Update(_mapper.Map<Book>(bookViewModelUpdate));
+                
+                if (!IsOperationValid())
+                {
+                    return View(bookViewModel);
+                }
+                
                 return RedirectToAction("Index");
             }
             
@@ -178,7 +197,13 @@ namespace VintageBookshelf.UI.Controllers
                 return NotFound();
             }
             
-            await _bookRepository.Remove(id);
+            await _bookService.Remove(id);
+            
+            if (!IsOperationValid())
+            {
+                return View(bookViewModel);
+            }
+            
             return RedirectToAction("Index");
         }
 
@@ -220,7 +245,7 @@ namespace VintageBookshelf.UI.Controllers
                 return PartialView("_UpdateAuthor", bookViewModel);
             }
 
-            await _authorRepository.Update(_mapper.Map<Author>(bookViewModel.Author));
+            await _authorService.Update(_mapper.Map<Author>(bookViewModel.Author));
 
             var url = Url.Action("FetchAuthor", "Books", new {id = bookViewModel.Id});
             return Json(new { success = true, url });

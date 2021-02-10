@@ -5,18 +5,25 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using VintageBookshelf.Domain.Interfaces;
 using VintageBookshelf.Domain.Models;
+using VintageBookshelf.Domain.Notifications;
+using VintageBookshelf.Domain.Services;
 using VintageBookshelf.UI.ViewModels;
 
 namespace VintageBookshelf.UI.Controllers
 {
-    public class AuthorsController : Controller
+    public class AuthorsController : BaseController
     {
         private readonly IAuthorRepository _authorRepository;
+        private readonly IAuthorService _authorService;
         private readonly IMapper _mapper;
 
-        public AuthorsController(IAuthorRepository authorRepository, IMapper mapper)
+        public AuthorsController(IAuthorRepository authorRepository, 
+                                 IAuthorService authorService, 
+                                 IMapper mapper,
+                                 INotifier notifier) : base(notifier)
         {
             _authorRepository = authorRepository;
+            _authorService = authorService;
             _mapper = mapper;
         }
 
@@ -51,12 +58,9 @@ namespace VintageBookshelf.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _authorRepository.Add(_mapper.Map<Author>(authorViewModel));
-                await _authorRepository.SaveChanges();
+                await _authorService.Add(_mapper.Map<Author>(authorViewModel));
                 return RedirectToAction("Index");
             }
-
-            var errors = ModelState.Values.SelectMany(m => m.Errors);
             
             return View(authorViewModel);
         }
@@ -84,8 +88,7 @@ namespace VintageBookshelf.UI.Controllers
 
             if (ModelState.IsValid)
             {
-                await _authorRepository.Update(_mapper.Map<Author>(authorViewModel));
-                await _authorRepository.SaveChanges();
+                await _authorService.Update(_mapper.Map<Author>(authorViewModel));
                 return RedirectToAction("Index");
             }
             return View(authorViewModel);
@@ -114,8 +117,7 @@ namespace VintageBookshelf.UI.Controllers
                 return NotFound();
             }
 
-            await _authorRepository.Remove(id);
-            await _authorRepository.SaveChanges();
+            await _authorService.Remove(id);
             return RedirectToAction("Index");
         }
     }
