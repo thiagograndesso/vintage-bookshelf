@@ -1,49 +1,47 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using VintageBookshelf.UI.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using VintageBookshelf.Data.Context;
-using VintageBookshelf.Data.Repository;
-using VintageBookshelf.Domain.Interfaces;
+using VintageBookshelf.UI.Configurations;
 
 namespace VintageBookshelf.UI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public IConfiguration Configuration { get; }
+
+        public Startup(IHostEnvironment hostEnvironment)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(hostEnvironment.ContentRootPath)
+                .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile($"appsettings.{hostEnvironment.EnvironmentName}.json", true, true)
+                .AddEnvironmentVariables();
+
+            if (hostEnvironment.IsDevelopment())
+            {
+                builder.AddUserSecrets<Startup>();
+            }
+
+            Configuration = builder.Build();
         }
 
-        public IConfiguration Configuration { get; }
-        
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddIdentityConfiguration(Configuration);
 
             services.AddDbContext<VintageBookshelfContext>(options =>
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection"),
                     o => o.MigrationsAssembly("VintageBookshelf.Data")));
             
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
-
-            services.AddScoped<VintageBookshelfContext>()
-                .AddScoped<IBookRepository, BookRepository>()
-                .AddScoped<IAuthorRepository, AuthorRepository>()
-                .AddScoped<IBookshelfRepository, BookshelfRepository>();
-
             services.AddAutoMapper(typeof(Startup));
+            services.ResolveDependencies();
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
