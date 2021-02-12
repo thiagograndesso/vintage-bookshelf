@@ -1,19 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VintageBookshelf.Domain.Interfaces;
 using VintageBookshelf.Domain.Models;
 using VintageBookshelf.Domain.Notifications;
 using VintageBookshelf.Domain.Services;
+using VintageBookshelf.UI.Extensions;
 using VintageBookshelf.UI.ViewModels;
 using static System.IO.File;
 
 namespace VintageBookshelf.UI.Controllers
 {
+    [Authorize]
     public class BooksController : BaseController
     {
         private readonly IBookRepository _bookRepository;
@@ -39,6 +41,7 @@ namespace VintageBookshelf.UI.Controllers
             _mapper = mapper;
         }
         
+        [AllowAnonymous]
         [Route("list-books")]
         public async Task<IActionResult> Index()
         {
@@ -46,6 +49,7 @@ namespace VintageBookshelf.UI.Controllers
             return View(_mapper.Map<IEnumerable<BookViewModel>>(books));
         }
         
+        [AllowAnonymous]
         [Route("book-details/{id:long}")]
         public async Task<IActionResult> Details(long id)
         {
@@ -58,6 +62,7 @@ namespace VintageBookshelf.UI.Controllers
             return View(bookViewModel);
         }
         
+        [ClaimsAuthorize("Book", "Add")]
         [Route("new-book")]
         public async Task<IActionResult> Create()
         {
@@ -65,6 +70,7 @@ namespace VintageBookshelf.UI.Controllers
             return View(bookViewModel);
         }
         
+        [ClaimsAuthorize("Book", "Add")]
         [Route("new-book")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -116,6 +122,7 @@ namespace VintageBookshelf.UI.Controllers
             return true;
         }
 
+        [ClaimsAuthorize("Book", "Edit")]
         [Route("edit-book/{id:long}")]
         public async Task<IActionResult> Edit(long id)
         {
@@ -130,6 +137,7 @@ namespace VintageBookshelf.UI.Controllers
             return View(bookViewModel);
         }
         
+        [ClaimsAuthorize("Book", "Edit")]
         [Route("edit-book")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -174,6 +182,7 @@ namespace VintageBookshelf.UI.Controllers
             return View(bookViewModel);
         }
         
+        [ClaimsAuthorize("Book", "Delete")]
         [Route("delete-book/{id:long}")]
         public async Task<IActionResult> Delete(long id)
         {
@@ -186,6 +195,7 @@ namespace VintageBookshelf.UI.Controllers
             return View(bookViewModel);
         }
         
+        [ClaimsAuthorize("Book", "Delete")]
         [Route("delete-book")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -207,6 +217,7 @@ namespace VintageBookshelf.UI.Controllers
             return RedirectToAction("Index");
         }
 
+        [ClaimsAuthorize("Book", "Edit")]
         [Route("update-book-author/{id:long}")]
         public async Task<IActionResult> UpdateAuthor(long id)
         {
@@ -219,6 +230,7 @@ namespace VintageBookshelf.UI.Controllers
             return PartialView("_UpdateAuthor", new BookViewModel { Author = bookViewModel.Author });
         }
 
+        [AllowAnonymous]
         [Route("fetch-book-author/{id:long}")]
         public async Task<IActionResult> FetchAuthor(long id)
         {
@@ -231,6 +243,7 @@ namespace VintageBookshelf.UI.Controllers
             return PartialView("_AuthorDetails", bookViewModel);
         }
 
+        [ClaimsAuthorize("Book", "Edit")]
         [Route("update-book-author/{id:long}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
