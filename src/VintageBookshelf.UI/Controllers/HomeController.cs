@@ -29,5 +29,35 @@ namespace VintageBookshelf.UI.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-    }
+
+        [Route("error/{id:length(3,3)}")]
+        public IActionResult Errors(int id)
+        {
+            var errorViewModel = new ErrorViewModel();
+
+            if (id == 500)
+            {
+                errorViewModel.Title = "Unexpected error";
+                errorViewModel.Message = "Whoops! An error has occurred. Please try again!";
+            }
+            else if (id == 404)
+            {
+                errorViewModel.Title = "Not found";
+                errorViewModel.Message = "This page does not exist!";
+            }
+            else if (id == 403)
+            {
+                errorViewModel.Title = "Not allowed";
+                errorViewModel.Message = "Access is not allowed!";
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+
+            errorViewModel.ErrorStatusCode = id;
+
+            return View("Error", errorViewModel);
+        }
+    } 
 }
