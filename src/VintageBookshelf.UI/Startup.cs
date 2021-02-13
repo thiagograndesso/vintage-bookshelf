@@ -35,7 +35,7 @@ namespace VintageBookshelf.UI
             services.AddIdentityConfiguration(Configuration);
 
             services.AddDbContext<VintageBookshelfContext>(options =>
-                options.UseSqlite(
+                options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection"),
                     o => o.MigrationsAssembly("VintageBookshelf.Data")));
 

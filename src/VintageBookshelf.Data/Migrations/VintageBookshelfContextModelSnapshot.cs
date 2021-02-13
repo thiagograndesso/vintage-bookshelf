@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VintageBookshelf.Data.Context;
 
@@ -14,13 +15,16 @@ namespace VintageBookshelf.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .UseIdentityColumns()
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.2");
 
             modelBuilder.Entity("VintageBookshelf.Domain.Models.Author", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
 
                     b.Property<string>("Biography")
                         .IsRequired()
@@ -33,7 +37,8 @@ namespace VintageBookshelf.Data.Migrations
                         .IsRequired()
                         .HasColumnType("VARCHAR(200)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .IsClustered();
 
                     b.ToTable("Author");
                 });
@@ -42,24 +47,25 @@ namespace VintageBookshelf.Data.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
 
                     b.Property<long>("AuthorId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
 
                     b.Property<long>("BookshelfId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Image")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Publisher")
                         .IsRequired()
                         .HasColumnType("VARCHAR(200)");
 
                     b.Property<int>("ReleaseYear")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("Summary")
                         .IsRequired()
@@ -69,7 +75,8 @@ namespace VintageBookshelf.Data.Migrations
                         .IsRequired()
                         .HasColumnType("VARCHAR(200)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .IsClustered();
 
                     b.HasIndex("AuthorId");
 
@@ -82,7 +89,8 @@ namespace VintageBookshelf.Data.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -96,7 +104,8 @@ namespace VintageBookshelf.Data.Migrations
                         .IsRequired()
                         .HasColumnType("VARCHAR(200)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .IsClustered();
 
                     b.ToTable("Bookshelf");
                 });

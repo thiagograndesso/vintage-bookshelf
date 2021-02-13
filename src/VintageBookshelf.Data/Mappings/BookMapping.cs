@@ -8,8 +8,12 @@ namespace VintageBookshelf.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Book> builder)
         {
-            builder.HasKey(b => b.Id);
+            builder.HasKey(b => b.Id)
+                .IsClustered();
 
+            builder.Property(b => b.Id)
+                .UseIdentityColumn();
+            
             builder.Property(b => b.Title)
                 .IsRequired()
                 .HasColumnType("VARCHAR(200)");
