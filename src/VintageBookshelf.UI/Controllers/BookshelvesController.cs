@@ -53,7 +53,6 @@ namespace VintageBookshelf.UI.Controllers
         
         [Route("new-bookshelf")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BookshelfViewModel bookshelfViewModel)
         {
             if (ModelState.IsValid)
@@ -78,7 +77,6 @@ namespace VintageBookshelf.UI.Controllers
         
         [Route("edit-bookshelf/{id:long}")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, BookshelfViewModel bookshelfViewModel)
         {
             if (ModelState.IsValid)
@@ -104,7 +102,6 @@ namespace VintageBookshelf.UI.Controllers
         
         [Route("delete-bookshelf/{id:long}")]
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
             var bookshelfViewModel = _mapper.Map<BookshelfViewModel>(await _bookshelfRepository.GetById(id));

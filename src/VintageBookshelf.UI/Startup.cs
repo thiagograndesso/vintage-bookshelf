@@ -38,8 +38,8 @@ namespace VintageBookshelf.UI
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection"),
                     o => o.MigrationsAssembly("VintageBookshelf.Data")));
-            
-            services.AddControllersWithViews();
+
+            services.AddMvcConfiguration();
             services.AddAutoMapper(typeof(Startup));
             services.ResolveDependencies();
         }

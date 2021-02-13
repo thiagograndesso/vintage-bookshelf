@@ -73,7 +73,6 @@ namespace VintageBookshelf.UI.Controllers
         [ClaimsAuthorize("Book", "Add")]
         [Route("new-book")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BookViewModel bookViewModel)
         {
             if (!ModelState.IsValid)
@@ -140,7 +139,6 @@ namespace VintageBookshelf.UI.Controllers
         [ClaimsAuthorize("Book", "Edit")]
         [Route("edit-book")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, BookViewModel bookViewModel)
         {
             if (id != bookViewModel.Id)
@@ -198,7 +196,6 @@ namespace VintageBookshelf.UI.Controllers
         [ClaimsAuthorize("Book", "Delete")]
         [Route("delete-book")]
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
             var bookViewModel = _mapper.Map<BookViewModel>(await _bookRepository.GetById(id));
@@ -246,7 +243,6 @@ namespace VintageBookshelf.UI.Controllers
         [ClaimsAuthorize("Book", "Edit")]
         [Route("update-book-author/{id:long}")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateAuthor(BookViewModel bookViewModel)
         {
             ModelState.Remove("Title");
