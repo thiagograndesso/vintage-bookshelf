@@ -40,4 +40,3 @@
           with:
             name: webapp
             path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-            
