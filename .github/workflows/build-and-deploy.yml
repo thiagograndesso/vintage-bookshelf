@@ -1,0 +1,43 @@
+  name: "Build and Deploy
+  
+  on: [workflow_dispatch]
+  
+  env:
+    AZURE_WEBAPP_NAME: vintagebookshelf
+    AZURE_WEBAPP_PACKAGE_PATH: './published'
+    NETCORE_VERSION: '5.0.x'
+  
+  jobs:
+    build:
+      name: Build and Deploy
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+          
+        - name: Setup .NET Core SDK ${{ env.NETCORE_VERSION }}
+          uses: actions/setup-dotnet@v1
+          with:
+            dotnet-version: ${{ env.NETCORE_VERSION }}
+        
+        - name: Restore packages
+          run: dotnet restore
+        
+        - name : Build app
+          run: dotnet build --configuration Release --no-restore
+            
+        - name: Publish app for deploy
+          run: dotnet publish --configuration Release --no-build --output ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+            
+        - name: Deploy to Azure Web App
+          uses: azure/webapps-deploy@v1
+          with:
+            app-name: ${{ env.AZURE_WEBAPP_NAME }}
+            publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+            package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+            
+        - name: Publish Artifacts
+          uses: actions/upload-artifact@v1.0.0
+          with:
+            name: webapp
+            path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+            
