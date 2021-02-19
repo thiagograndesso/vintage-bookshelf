@@ -5,7 +5,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\VintageBookshelf.Data\VintageBookshelf.Data.csproj" />
+      <ProjectReference Include="..\VintageBookshelf.Domain\VintageBookshelf.Domain.csproj" />
     </ItemGroup>
 
 </Project>
