@@ -50,7 +50,8 @@ namespace VintageBookshelf.Data.Repository
         
         public virtual async Task Remove(long id)
         {
-            _dbSet.Remove(new TEntity { Id = id });
+            var entity =  await _dbSet.FindAsync(id);
+            _dbSet.Remove(entity);
             await SaveChanges();
         }
 
