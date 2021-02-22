@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace VintageBookshelf.UI.Migrations
+namespace VintageBookshelf.Data.Data.Migrations
 {
     public partial class InitialIdentitySchemachanges : Migration
     {
