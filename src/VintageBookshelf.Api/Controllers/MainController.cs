@@ -16,7 +16,7 @@ namespace VintageBookshelf.Api.Controllers
         
         protected ActionResult CustomResponse(ModelStateDictionary modelState)
         {
-            if (!ModelState.IsValid)
+            if (!modelState.IsValid)
             {
                 NotifyInvalidModelState(modelState);
             }
@@ -39,7 +39,7 @@ namespace VintageBookshelf.Api.Controllers
 
         protected bool IsOperationValid()
         {
-            return _notifier.HasNotification();
+            return !_notifier.HasNotification();
         }
 
         private void NotifyInvalidModelState(ModelStateDictionary modelState)

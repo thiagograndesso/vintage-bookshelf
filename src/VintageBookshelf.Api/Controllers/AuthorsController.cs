@@ -31,8 +31,8 @@ namespace VintageBookshelf.Api.Controllers
         [ProducesResponseType(200)]
         public async Task<ActionResult<IEnumerable<AuthorDto>>> GetAll()
         {
-            var authors = _mapper.Map<IEnumerable<AuthorDto>>(await _authorRepository.GetAll());
-            return Ok(authors);
+            var authors = _mapper.Map<IEnumerable<AuthorDto>>(await _authorRepository.GetAllWithBooks());
+            return CustomResponse(authors);
         }
         
         [HttpGet("{id:long}")]
@@ -41,7 +41,7 @@ namespace VintageBookshelf.Api.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<AuthorDto>> GetById(long id)
         {
-            var author = _mapper.Map<AuthorDto>(await _authorRepository.GetById(id));
+            var author = _mapper.Map<AuthorDto>(await _authorRepository.GetAuthorWithBooks(id));
             if (author is null)
             {
                 return NotFound();
@@ -50,8 +50,9 @@ namespace VintageBookshelf.Api.Controllers
         }
         
         [HttpPost]
-        [ProducesResponseType(201)]
-        public async Task<ActionResult<AuthorDto>> Add(AuthorDto authorDto)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<AuthorDto>> Add([FromBody] AuthorDto authorDto)
         {
             if (!ModelState.IsValid)
             {

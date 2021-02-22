@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,7 +27,7 @@ namespace VintageBookshelf.Api
             });
             
             services.AddAutoMapper(typeof(Startup));
-            MvcConfig.AddMvc(services);
+            services.AddMvcConfig();
             services.ResolveDependencies();
             services.AddSwaggerGen(c =>
             {

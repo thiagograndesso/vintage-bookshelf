@@ -14,4 +14,8 @@
       <ProjectReference Include="..\VintageBookshelf.Domain\VintageBookshelf.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\images" />
+    </ItemGroup>
+
 </Project>
