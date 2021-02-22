@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using VintageBookshelf.Data.Identity;
 
-namespace VintageBookshelf.Data.Data.Migrations
+namespace VintageBookshelf.Data.Identity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20210213143154_Initial Identity Schema changes")]

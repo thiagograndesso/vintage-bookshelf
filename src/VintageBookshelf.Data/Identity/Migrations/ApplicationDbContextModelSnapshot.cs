@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using VintageBookshelf.Data.Identity;
 
-namespace VintageBookshelf.Data.Data.Migrations
+namespace VintageBookshelf.Data.Identity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
