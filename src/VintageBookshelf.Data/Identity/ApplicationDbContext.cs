@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace VintageBookshelf.Data.Data
+namespace VintageBookshelf.Data.Identity
 {
     public class ApplicationDbContext : IdentityDbContext
     {

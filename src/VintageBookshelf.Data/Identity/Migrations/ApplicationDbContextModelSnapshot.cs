@@ -3,15 +3,14 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
+using VintageBookshelf.Data.Identity;
 
 namespace VintageBookshelf.Data.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210213143154_Initial Identity Schema changes")]
-    partial class InitialIdentitySchemachanges
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
