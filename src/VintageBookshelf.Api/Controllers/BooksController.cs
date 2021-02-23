@@ -33,7 +33,7 @@ namespace VintageBookshelf.Api.Controllers
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<IEnumerable<BookDto>>> Add([FromBody] BookDto bookDto)
+        public async Task<ActionResult<BookDto>> Add([FromBody] BookDto bookDto)
         {
             if (!ModelState.IsValid)
             {
@@ -49,7 +49,45 @@ namespace VintageBookshelf.Api.Controllers
             return CustomResponse(bookDto);
         }
         
+        [HttpPut("{id:long}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<BookDto>> Update(long id, [FromBody] BookDto bookDto)
+        {
+            if (id != bookDto.Id)
+            {
+                NotifyError("The given id doesn't match with object to update!");
+                return NotFound();
+            }
+            
+            var toUpdate = _mapper.Map<BookDto>(await _bookRepository.GetBookWithAuthorAndBookshelf(id));
+            bookDto.Image = toUpdate.Image;
+            
+            if (!ModelState.IsValid)
+            {
+                return CustomResponse(ModelState);
+            }
+
+            if (bookDto.UploadImage is not null)
+            {
+                if (!await UploadImage(bookDto))
+                {
+                    return CustomResponse();
+                }
+
+                toUpdate.Image = bookDto.Image;
+            }
+
+            toUpdate.Publisher = bookDto.Publisher;
+            toUpdate.ReleaseYear = bookDto.ReleaseYear;
+            toUpdate.Title = bookDto.Title;
+
+            await _bookService.Update(_mapper.Map<Book>(toUpdate));
+            return CustomResponse(bookDto);
+        }
+        
         [HttpGet]
+        [ProducesResponseType(200)]
         public async Task<ActionResult<IEnumerable<BookDto>>> GetAll()
         {
             var books = _mapper.Map<IEnumerable<BookDto>>(await _bookRepository.GetAllWithAuthorAndBookshelf());
@@ -57,9 +95,11 @@ namespace VintageBookshelf.Api.Controllers
         }
         
         [HttpGet("{id:long}")]
-        public async Task<ActionResult<IEnumerable<BookDto>>> GetById(long id)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<BookDto>> GetById(long id)
         {
-            var book = _mapper.Map<IEnumerable<BookDto>>(await _bookRepository.GetById(id));
+            var book = _mapper.Map<BookDto>(await _bookRepository.GetById(id));
             if (book == null)
             {
                 return NotFound();
@@ -68,16 +108,18 @@ namespace VintageBookshelf.Api.Controllers
         }
         
         [HttpDelete("{id:long}")]
-        public async Task<ActionResult<IEnumerable<BookDto>>> Remove(long id)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult> Remove(long id)
         {
-            var book = _mapper.Map<IEnumerable<BookDto>>(await _bookRepository.GetById(id));
+            var book = _mapper.Map<BookDto>(await _bookRepository.GetById(id));
             if (book == null)
             {
                 return NotFound();
             }
 
             await _bookService.Remove(id);
-            return CustomResponse(book);
+            return CustomResponse();
         }
 
         private async Task<bool> UploadImage(BookDto bookDto)
@@ -99,6 +141,8 @@ namespace VintageBookshelf.Api.Controllers
 
             var imageDataByteArray = Convert.FromBase64String(bookDto.UploadImage);
             await WriteAllBytesAsync(filePath, imageDataByteArray);
+
+            bookDto.Image = imageName;
             return true;
 
         }
