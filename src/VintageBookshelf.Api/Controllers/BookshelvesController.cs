@@ -33,7 +33,7 @@ namespace VintageBookshelf.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<BookshelfDto>>> GetAll()
         {
-            var bookshelves = _mapper.Map<IEnumerable<BookshelfDto>>(await _bookshelfRepository.GetAll());
+            var bookshelves = _mapper.Map<IEnumerable<BookshelfDto>>(await _bookshelfRepository.GetAllWithProducts());
             return CustomResponse(bookshelves);
         }
         

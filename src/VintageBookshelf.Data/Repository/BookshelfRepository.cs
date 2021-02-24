@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VintageBookshelf.Data.Context;
@@ -9,12 +10,20 @@ namespace VintageBookshelf.Data.Repository
     public sealed class BookshelfRepository : Repository<Bookshelf>, IBookshelfRepository
     {
         public BookshelfRepository(VintageBookshelfContext db) : base(db) { }
-        public Task<Bookshelf> GetBookshelfWithProducts(long id)
+        public async Task<Bookshelf> GetBookshelfWithProducts(long id)
         {
-            return Db.Bookshelves
+            return await Db.Bookshelves
                 .AsNoTracking()
                 .Include(b => b.Books)
                 .FirstOrDefaultAsync(b => b.Id == id);
+        }
+
+        public async Task<IEnumerable<Bookshelf>> GetAllWithProducts()
+        {
+            return await Db.Bookshelves
+                .AsNoTracking()
+                .Include(b => b.Books)
+                .ToListAsync();
         }
     }
 }
