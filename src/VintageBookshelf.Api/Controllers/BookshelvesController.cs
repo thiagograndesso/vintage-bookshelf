@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VintageBookshelf.Api.Dtos;
 using VintageBookshelf.Domain.Interfaces;
@@ -28,7 +29,7 @@ namespace VintageBookshelf.Api.Controllers
         }
         
         [HttpGet]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<BookshelfDto>>> GetAll()
         {
             var bookshelves = _mapper.Map<IEnumerable<AuthorDto>>(await _bookshelfRepository.GetAll());
@@ -36,9 +37,9 @@ namespace VintageBookshelf.Api.Controllers
         }
         
         [HttpGet("{id:long}")]
-        [ProducesResponseType(200, Type = typeof(BookshelfDto))]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BookshelfDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<BookshelfDto>> GetById(long id)
         {
             var bookshelf = _mapper.Map<BookshelfDto>(await _bookshelfRepository.GetBookshelfWithProducts(id));
@@ -50,8 +51,8 @@ namespace VintageBookshelf.Api.Controllers
         }
         
         [HttpPost]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BookshelfDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<BookshelfDto>> Add([FromBody] BookshelfDto bookshelfDto)
         {
             if (!ModelState.IsValid)
@@ -63,8 +64,8 @@ namespace VintageBookshelf.Api.Controllers
         }
         
         [HttpPut("{id:long}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BookshelfDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<BookshelfDto>> Update(long id, [FromBody] BookshelfDto bookshelfDto)
         {
             if (id != bookshelfDto.Id)
@@ -83,8 +84,8 @@ namespace VintageBookshelf.Api.Controllers
         }
         
         [HttpDelete]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<BookshelfDto>> Remove(long id)
         {
             var author = _mapper.Map<BookshelfDto>(await _bookshelfRepository.GetById(id));
