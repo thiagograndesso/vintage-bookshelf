@@ -52,6 +52,7 @@ namespace VintageBookshelf.Api.Controllers
         [HttpPut("{id:long}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<BookDto>> Update(long id, [FromBody] BookDto bookDto)
         {
             if (id != bookDto.Id)
