@@ -27,7 +27,7 @@ namespace VintageBookshelf.Api
             });
             
             services.AddAutoMapper(typeof(Startup));
-            services.AddMvcConfig();
+            services.AddWebApiConfig();
             services.ResolveDependencies();
             services.AddSwaggerGen(c =>
             {
@@ -44,13 +44,7 @@ namespace VintageBookshelf.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "VintageBookshelf.Api v1"));
             }
 
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseWebApiConfig();
         }
     }
 }
