@@ -11,6 +11,7 @@ using VintageBookshelf.Domain.Services;
 
 namespace VintageBookshelf.Api.Controllers
 {
+    [Produces("application/json")]
     [Route("api/bookshelves")]
     public class BookshelvesController : MainController
     {
