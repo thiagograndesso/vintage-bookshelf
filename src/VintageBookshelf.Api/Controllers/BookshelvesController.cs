@@ -33,7 +33,7 @@ namespace VintageBookshelf.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<BookshelfDto>>> GetAll()
         {
-            var bookshelves = _mapper.Map<IEnumerable<AuthorDto>>(await _bookshelfRepository.GetAll());
+            var bookshelves = _mapper.Map<IEnumerable<BookshelfDto>>(await _bookshelfRepository.GetAll());
             return CustomResponse(bookshelves);
         }
         
@@ -89,8 +89,8 @@ namespace VintageBookshelf.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<BookshelfDto>> Remove(long id)
         {
-            var author = _mapper.Map<BookshelfDto>(await _bookshelfRepository.GetById(id));
-            if (author is null)
+            var bookshelf = _mapper.Map<BookshelfDto>(await _bookshelfRepository.GetById(id));
+            if (bookshelf is null)
             {
                 return NotFound();
             }
