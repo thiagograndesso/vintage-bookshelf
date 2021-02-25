@@ -69,12 +69,6 @@ namespace VintageBookshelf.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<BookshelfDto>> Update(long id, [FromBody] BookshelfDto bookshelfDto)
         {
-            if (id != bookshelfDto.Id)
-            {
-                NotifyError("The given id in the body paylod doesn't match with the given id in the path!");
-                return CustomResponse(bookshelfDto);
-            }
-            
             if (!ModelState.IsValid)
             {
                 return CustomResponse(ModelState);
@@ -89,7 +83,7 @@ namespace VintageBookshelf.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<BookshelfDto>> Remove(long id)
         {
-            var bookshelf = _mapper.Map<BookshelfDto>(await _bookshelfRepository.GetById(id));
+            var bookshelf = await _bookshelfRepository.GetById(id);
             if (bookshelf is null)
             {
                 return NotFound();
