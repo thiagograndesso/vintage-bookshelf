@@ -17,8 +17,8 @@ namespace VintageBookshelf.Api.Configuration
             services.AddScoped<IBookshelfRepository, BookshelfRepository>();
             
             services.AddScoped<IAuthorService, AuthorService>();
-            services.AddScoped<IBookRepository, BookRepository>();
-            services.AddScoped<IBookshelfRepository, BookshelfRepository>();
+            services.AddScoped<IBookService, BookService>();
+            services.AddScoped<IBookshelfService, BookshelfService>();
             services.AddScoped<INotifier, Notifier>();
             
             return services;
