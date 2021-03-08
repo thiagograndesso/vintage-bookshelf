@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace VintageBookshelf.Api.Configuration
 {
-    public static class ApiConfig
+    public static class WebApiConfig
     {
         public static IServiceCollection AddWebApiConfig(this IServiceCollection services)
         {

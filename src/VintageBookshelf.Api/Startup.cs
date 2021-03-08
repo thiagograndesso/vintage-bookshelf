@@ -25,14 +25,16 @@ namespace VintageBookshelf.Api
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
-            
+
+            services.AddIdentityConfig(Configuration);
             services.AddAutoMapper(typeof(Startup));
             services.AddWebApiConfig();
-            services.ResolveDependencies();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "VintageBookshelf.Api", Version = "v1"});
             });
+            
+            services.ResolveDependencies();
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -44,6 +46,7 @@ namespace VintageBookshelf.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "VintageBookshelf.Api v1"));
             }
 
+            app.UseAuthentication();
             app.UseWebApiConfig();
         }
     }
