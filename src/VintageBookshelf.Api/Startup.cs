@@ -22,9 +22,7 @@ namespace VintageBookshelf.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<VintageBookshelfContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            });
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentityConfig(Configuration);
             services.AddAutoMapper(typeof(Startup));
