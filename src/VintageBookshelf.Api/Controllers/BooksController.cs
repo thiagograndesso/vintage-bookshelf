@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VintageBookshelf.Api.Dtos;
+using VintageBookshelf.Api.Extensions;
 using VintageBookshelf.Domain.Interfaces;
 using VintageBookshelf.Domain.Models;
 using VintageBookshelf.Domain.Notifications;
@@ -13,6 +15,7 @@ using static System.IO.File;
 
 namespace VintageBookshelf.Api.Controllers
 {
+    [Authorize]
     [Route("api/books")]
     public class BooksController : MainController
     {
@@ -30,6 +33,7 @@ namespace VintageBookshelf.Api.Controllers
             _mapper = mapper;
         }
 
+        [ClaimsAuthorize("Book","Add")]
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -49,6 +53,7 @@ namespace VintageBookshelf.Api.Controllers
             return CustomResponse(bookDto);
         }
         
+        [ClaimsAuthorize("Book","Update")]
         [HttpPut("{id:long}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -87,6 +92,7 @@ namespace VintageBookshelf.Api.Controllers
             return CustomResponse(bookDto);
         }
         
+        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(200)]
         public async Task<ActionResult<IEnumerable<BookDto>>> GetAll()
@@ -108,6 +114,7 @@ namespace VintageBookshelf.Api.Controllers
             return CustomResponse(book);
         }
         
+        [ClaimsAuthorize("Book","Remove")]
         [HttpDelete("{id:long}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]

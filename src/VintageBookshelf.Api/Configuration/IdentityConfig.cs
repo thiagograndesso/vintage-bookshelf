@@ -1,7 +1,11 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using VintageBookshelf.Api.Extensions;
 using VintageBookshelf.Data.Identity;
 
 namespace VintageBookshelf.Api.Configuration
@@ -16,7 +20,10 @@ namespace VintageBookshelf.Api.Configuration
             });
 
             services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.AddJwtAuthenticationConfig(configuration);
             
             return services;
         }
