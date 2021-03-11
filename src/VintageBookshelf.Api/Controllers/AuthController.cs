@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -51,7 +50,7 @@ namespace VintageBookshelf.Api.Controllers
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, isPersistent: false);
-                return CustomResponse(await GenerateJwt(""));
+                return CustomResponse(await GenerateJwt(registerUserDto.Email));
             }
 
             foreach (var error in result.Errors)
