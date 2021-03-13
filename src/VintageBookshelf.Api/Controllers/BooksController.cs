@@ -26,7 +26,8 @@ namespace VintageBookshelf.Api.Controllers
         public BooksController(IBookRepository bookRepository,
                                IBookService bookService,
                                IMapper mapper,
-                               INotifier notifier) : base(notifier)
+                               INotifier notifier,
+                               IUser user) : base(notifier, user)
         {
             _bookRepository = bookRepository;
             _bookService = bookService;

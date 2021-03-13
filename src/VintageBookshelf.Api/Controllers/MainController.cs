@@ -1,6 +1,8 @@
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using VintageBookshelf.Domain.Interfaces;
 using VintageBookshelf.Domain.Notifications;
 
 namespace VintageBookshelf.Api.Controllers
@@ -8,10 +10,21 @@ namespace VintageBookshelf.Api.Controllers
     public abstract class MainController : ControllerBase
     {
         private readonly INotifier _notifier;
+        private readonly IUser _appUser;
 
-        public MainController(INotifier notifier)
+        protected bool IsUserAuthenticated { get; }
+        protected Guid UserId { get; }
+
+        public MainController(INotifier notifier, IUser appUser)
         {
             _notifier = notifier;
+            _appUser = appUser;
+
+            if (_appUser.IsAuthenticated())
+            {
+                UserId = _appUser.GetUserId();
+                IsUserAuthenticated = true;
+            }
         }
         
         protected ActionResult CustomResponse(ModelStateDictionary modelState)

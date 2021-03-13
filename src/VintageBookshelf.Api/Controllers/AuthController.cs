@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using VintageBookshelf.Api.Dtos;
 using VintageBookshelf.Api.Extensions;
+using VintageBookshelf.Domain.Interfaces;
 using VintageBookshelf.Domain.Notifications;
 
 namespace VintageBookshelf.Api.Controllers
@@ -24,7 +25,8 @@ namespace VintageBookshelf.Api.Controllers
         public AuthController(SignInManager<IdentityUser> signInManager, 
                               UserManager<IdentityUser> userManager, 
                               INotifier notifier,
-                              IOptions<AppSettings> appSettings) : base(notifier)
+                              IUser user,
+                              IOptions<AppSettings> appSettings) : base(notifier, user)
         {
             _signInManager = signInManager;
             _userManager = userManager;

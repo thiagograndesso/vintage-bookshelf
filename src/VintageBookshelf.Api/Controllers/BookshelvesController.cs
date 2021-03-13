@@ -22,7 +22,8 @@ namespace VintageBookshelf.Api.Controllers
         public BookshelvesController(IBookshelfRepository bookshelfRepository,
                                      IBookshelfService bookshelfService,
                                      IMapper mapper,
-                                     INotifier notifier) : base(notifier)
+                                     INotifier notifier,
+                                     IUser user) : base(notifier, user)
         {
             _bookshelfRepository = bookshelfRepository;
             _bookshelfService = bookshelfService;

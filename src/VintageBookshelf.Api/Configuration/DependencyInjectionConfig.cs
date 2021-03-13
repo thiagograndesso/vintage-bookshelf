@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using VintageBookshelf.Api.Extensions;
 using VintageBookshelf.Data.Context;
 using VintageBookshelf.Data.Repository;
 using VintageBookshelf.Domain.Interfaces;
@@ -21,6 +23,8 @@ namespace VintageBookshelf.Api.Configuration
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IBookshelfService, BookshelfService>();
             services.AddScoped<INotifier, Notifier>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IUser, AspNetUser>();
             
             return services;
         }
