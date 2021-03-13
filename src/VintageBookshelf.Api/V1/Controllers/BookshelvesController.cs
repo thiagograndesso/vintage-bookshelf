@@ -3,16 +3,18 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using VintageBookshelf.Api.Controllers;
 using VintageBookshelf.Api.Dtos;
 using VintageBookshelf.Domain.Interfaces;
 using VintageBookshelf.Domain.Models;
 using VintageBookshelf.Domain.Notifications;
 using VintageBookshelf.Domain.Services;
 
-namespace VintageBookshelf.Api.Controllers
+namespace VintageBookshelf.Api.V1.Controllers
 {
+    [ApiVersion("1.0")]
     [Produces("application/json")]
-    [Route("api/bookshelves")]
+    [Route("api/v{version:apiVersion}/bookshelves")]
     public class BookshelvesController : MainController
     {
         private readonly IBookshelfRepository _bookshelfRepository;
