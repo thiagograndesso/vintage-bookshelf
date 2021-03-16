@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using VintageBookshelf.Api.Extensions;
 using VintageBookshelf.Data.Context;
 using VintageBookshelf.Data.Repository;
@@ -25,6 +26,8 @@ namespace VintageBookshelf.Api.Configuration
             services.AddScoped<INotifier, Notifier>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUser, AspNetUser>();
+
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
             
             return services;
         }
