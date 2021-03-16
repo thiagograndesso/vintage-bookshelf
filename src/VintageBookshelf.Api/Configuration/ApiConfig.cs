@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace VintageBookshelf.Api.Configuration
 {
-    public static class WebApiConfig
+    public static class ApiConfig
     {
-        public static IServiceCollection AddWebApiConfig(this IServiceCollection services)
+        public static IServiceCollection AddApiConfig(this IServiceCollection services)
         {
             services.AddApiVersioning(options =>
             {
@@ -14,13 +16,17 @@ namespace VintageBookshelf.Api.Configuration
                 options.AssumeDefaultVersionWhenUnspecified = true;
                 options.DefaultApiVersion = new ApiVersion(1, 0);
             });
+            
             services.AddVersionedApiExplorer(options =>
             {
                 options.GroupNameFormat = "'v'VVV";
                 options.SubstituteApiVersionInUrl = true;
             });
+            
             services.AddControllers();
+            
             services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
+            
             services.AddCors(options =>
             {
                 options.AddPolicy("Development",
@@ -32,10 +38,15 @@ namespace VintageBookshelf.Api.Configuration
             return services;
         }
 
-        public static IApplicationBuilder UseWebApiConfig(this IApplicationBuilder app)
+        public static IApplicationBuilder UseApiConfig(this IApplicationBuilder app, IWebHostEnvironment env)
         {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseCors("Development");
+            }
+            
             app.UseHttpsRedirection();
-            app.UseCors("Development");
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });

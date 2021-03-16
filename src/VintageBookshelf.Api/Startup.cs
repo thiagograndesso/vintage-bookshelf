@@ -12,9 +12,20 @@ namespace VintageBookshelf.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IHostEnvironment hostEnvironment)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(hostEnvironment.ContentRootPath)
+                .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile($"appsettings.{hostEnvironment.EnvironmentName}.json", true, true)
+                .AddEnvironmentVariables();
+
+            if (hostEnvironment.IsDevelopment())
+            {
+                builder.AddUserSecrets<Startup>();
+            }
+
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -25,8 +36,11 @@ namespace VintageBookshelf.Api
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentityConfig(Configuration);
+            
             services.AddAutoMapper(typeof(Startup));
-            services.AddWebApiConfig();
+            
+            services.AddApiConfig();
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "VintageBookshelf.Api", Version = "v1"});
@@ -37,15 +51,10 @@ namespace VintageBookshelf.Api
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "VintageBookshelf.Api v1"));
-            }
-
             app.UseAuthentication();
-            app.UseWebApiConfig();
+            app.UseApiConfig(env);
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "VintageBookshelf.Api v1"));
         }
     }
 }
