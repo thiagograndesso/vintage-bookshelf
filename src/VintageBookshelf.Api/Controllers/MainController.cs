@@ -7,6 +7,7 @@ using VintageBookshelf.Domain.Notifications;
 
 namespace VintageBookshelf.Api.Controllers
 {
+    [ApiController]
     public abstract class MainController : ControllerBase
     {
         private readonly INotifier _notifier;

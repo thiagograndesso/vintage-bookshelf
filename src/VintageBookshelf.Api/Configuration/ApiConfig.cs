@@ -10,6 +10,8 @@ namespace VintageBookshelf.Api.Configuration
     {
         public static IServiceCollection AddApiConfig(this IServiceCollection services)
         {
+            services.AddControllers();
+        
             services.AddApiVersioning(options =>
             {
                 options.ReportApiVersions = true;
@@ -21,9 +23,7 @@ namespace VintageBookshelf.Api.Configuration
             {
                 options.GroupNameFormat = "'v'VVV";
                 options.SubstituteApiVersionInUrl = true;
-            });
-            
-            services.AddControllers();
+            });          
             
             services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
             
@@ -45,9 +45,14 @@ namespace VintageBookshelf.Api.Configuration
                 app.UseDeveloperExceptionPage();
                 app.UseCors("Development");
             }
+            else
+            {
+                app.UseHsts();
+            }
             
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
             

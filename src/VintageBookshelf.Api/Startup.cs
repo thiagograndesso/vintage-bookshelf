@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,21 +41,16 @@ namespace VintageBookshelf.Api
             services.AddAutoMapper(typeof(Startup));
             
             services.AddApiConfig();
-            
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = "VintageBookshelf.Api", Version = "v1"});
-            });
+
+            services.AddSwaggerConfig();
             
             services.ResolveDependencies();
         }
         
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
-            app.UseAuthentication();
             app.UseApiConfig(env);
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "VintageBookshelf.Api v1"));
+            app.UseSwaggerConfig(provider);
         }
     }
 }
