@@ -95,7 +95,6 @@ namespace VintageBookshelf.Api.V1.Controllers
             return CustomResponse(bookDto);
         }
         
-        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(200)]
         public async Task<ActionResult<IEnumerable<BookDto>>> GetAll()
