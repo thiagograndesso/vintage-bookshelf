@@ -2,15 +2,17 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using VintageBookshelf.Api.Controllers;
 using VintageBookshelf.Api.Dtos;
 using VintageBookshelf.Domain.Interfaces;
 using VintageBookshelf.Domain.Models;
 using VintageBookshelf.Domain.Notifications;
 using VintageBookshelf.Domain.Services;
 
-namespace VintageBookshelf.Api.Controllers
+namespace VintageBookshelf.Api.V1.Controllers
 {
-    [Route("api/authors")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/authors")]
     public class AuthorsController : MainController
     {
         private readonly IAuthorRepository _authorRepository;

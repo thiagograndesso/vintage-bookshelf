@@ -7,10 +7,10 @@ using VintageBookshelf.Domain.Notifications;
 
 namespace VintageBookshelf.Api.Controllers
 {
+    [ApiController]
     public abstract class MainController : ControllerBase
     {
         private readonly INotifier _notifier;
-        private readonly IUser _appUser;
 
         protected bool IsUserAuthenticated { get; }
         protected Guid UserId { get; }
@@ -18,11 +18,10 @@ namespace VintageBookshelf.Api.Controllers
         public MainController(INotifier notifier, IUser appUser)
         {
             _notifier = notifier;
-            _appUser = appUser;
-
-            if (_appUser.IsAuthenticated())
+            
+            if (appUser.IsAuthenticated())
             {
-                UserId = _appUser.GetUserId();
+                UserId = appUser.GetUserId();
                 IsUserAuthenticated = true;
             }
         }

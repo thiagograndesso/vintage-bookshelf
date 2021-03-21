@@ -8,14 +8,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using VintageBookshelf.Api.Controllers;
 using VintageBookshelf.Api.Dtos;
 using VintageBookshelf.Api.Extensions;
 using VintageBookshelf.Domain.Interfaces;
 using VintageBookshelf.Domain.Notifications;
 
-namespace VintageBookshelf.Api.Controllers
+namespace VintageBookshelf.Api.V1.Controllers
 {
-    [Route("api")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}")]
     public class AuthController : MainController
     {
         private readonly SignInManager<IdentityUser> _signInManager;

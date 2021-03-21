@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using VintageBookshelf.Api.Controllers;
 using VintageBookshelf.Api.Dtos;
 using VintageBookshelf.Api.Extensions;
 using VintageBookshelf.Domain.Interfaces;
@@ -13,10 +14,11 @@ using VintageBookshelf.Domain.Notifications;
 using VintageBookshelf.Domain.Services;
 using static System.IO.File;
 
-namespace VintageBookshelf.Api.Controllers
+namespace VintageBookshelf.Api.V1.Controllers
 {
+    [ApiVersion("1.0")]
     [Authorize]
-    [Route("api/books")]
+    [Route("api/v{version:apiVersion}/books")]
     public class BooksController : MainController
     {
         private readonly IBookRepository _bookRepository;
@@ -93,7 +95,6 @@ namespace VintageBookshelf.Api.Controllers
             return CustomResponse(bookDto);
         }
         
-        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(200)]
         public async Task<ActionResult<IEnumerable<BookDto>>> GetAll()
