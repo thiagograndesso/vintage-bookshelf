@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using VintageBookshelf.Api.Extensions;
 
 namespace VintageBookshelf.Api.Configuration
 {
@@ -53,6 +54,7 @@ namespace VintageBookshelf.Api.Configuration
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();
+            app.UseMiddleware<ExceptionMiddleware>();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
             

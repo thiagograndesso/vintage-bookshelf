@@ -68,6 +68,8 @@ namespace VintageBookshelf.Api.V1.Controllers
         [HttpPost("sign-in")]
         public async Task<ActionResult> SignIn([FromBody] LoginUserDto loginUserDto)
         {
+            throw new Exception("We're done when I say we're done");
+
             if (!ModelState.IsValid)
             {
                 return CustomResponse(ModelState);

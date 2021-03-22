@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using VintageBookshelf.Api.Configuration;
+using VintageBookshelf.Api.Extensions;
 using VintageBookshelf.Data.Context;
 
 namespace VintageBookshelf.Api
@@ -43,6 +44,8 @@ namespace VintageBookshelf.Api
             services.AddApiConfig();
 
             services.AddSwaggerConfig();
+
+            services.AddLoggingConfig(Configuration);
             
             services.ResolveDependencies();
         }
@@ -51,6 +54,7 @@ namespace VintageBookshelf.Api
         {
             app.UseApiConfig(env);
             app.UseSwaggerConfig(provider);
+            app.UseLoggingConfig();
         }
     }
 }
