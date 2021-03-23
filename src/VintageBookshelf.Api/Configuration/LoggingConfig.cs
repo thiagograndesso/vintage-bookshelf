@@ -4,11 +4,9 @@ using Elmah.Io.AspNetCore.HealthChecks;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VintageBookshelf.Api.Extensions;
-using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace VintageBookshelf.Api.Configuration
 {
